@@ -11,12 +11,13 @@ To get these inputs, you will have to use three other OpenVino models:
 * [Facial Landmarks Detection](https://docs.openvinotoolkit.org/latest/_models_intel_landmarks_regression_retail_0009_description_landmarks_regression_retail_0009.html)
 
 ##The Pipeline
+
 You will have to coordinate the flow of data from the input, and then amongst the different models and finally to the mouse controller. The flow of data will look like this:
 ![pipleline of the system](images/pipeline.png)
 
 ## Project Set Up and Installation
 * Follow the guidelines to install the [openVino](https://docs.openvinotoolkit.org/latest/index.html)
-* 
+* Clone this repo and just follow the [how-to-run](how-to-run.md)
 
 ## Running applicaitno (Demo)
 * Check [how-to-run](how-to-run.md)
@@ -29,11 +30,14 @@ You will have to coordinate the flow of data from the input, and then amongst th
 
 ## Benchmarks
 I am not able to run the model on multiple devices because I don't have access to all kind of hardware. Though I did try to execute this on udacity's workspace but was getting `file not found ` erro for input file.
-NOTE: I have attached the expected working python notebook to run this experiment on multiple devices.
+
+NOTE: I have attached the expected working python notebook to run this experiment on multiple devices. Check it [here](src/computer-controller.ipynb)
 
 ## Results
-System Info: MacBook Pro with intel i5
+**System Info:**
+MacBook Pro with intel i5
 Inference time for full demo video:
+
     FP16: 113.7 sec
     FP32: 117.2 sec
 
