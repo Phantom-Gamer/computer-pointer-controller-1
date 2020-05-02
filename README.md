@@ -1,21 +1,42 @@
 # Computer Pointer Controller
+Project is to control the mouse pointer of your computer using gaze estimation model. 
+You will be using the InferenceEngine API from Intel's OpenVino ToolKit to build the project. The gaze estimation model requires three inputs:
+* The head pose
+* The left eye image
+* The right eye image.
 
-*TODO:* Write a short introduction to your project
+To get these inputs, you will have to use three other OpenVino models:
+* [Face Detection](https://docs.openvinotoolkit.org/latest/_models_intel_face_detection_adas_binary_0001_description_face_detection_adas_binary_0001.html)
+* [Head Pose Estimation](https://docs.openvinotoolkit.org/latest/_models_intel_head_pose_estimation_adas_0001_description_head_pose_estimation_adas_0001.html)
+* [Facial Landmarks Detection](https://docs.openvinotoolkit.org/latest/_models_intel_landmarks_regression_retail_0009_description_landmarks_regression_retail_0009.html)
+
+##The Pipeline
+You will have to coordinate the flow of data from the input, and then amongst the different models and finally to the mouse controller. The flow of data will look like this:
+![pipleline of the system](images/pipeline.png)
 
 ## Project Set Up and Installation
-*TODO:* Explain the setup procedures to run your project. For instance, this can include your project directory structure, the models you need to download and where to place them etc. Also include details about how to install the dependencies your project requires.
+* Follow the guidelines to install the [openVino](https://docs.openvinotoolkit.org/latest/index.html)
+* 
 
-## Demo
-*TODO:* Explain how to run a basic demo of your model.
+## Running applicaitno (Demo)
+* Check [how-to-run](how-to-run.md)
+
 
 ## Documentation
-*TODO:* Include any documentation that users might need to better understand your project code. For instance, this is a good place to explain the command line arguments that your project supports.
+* Run command `python3 main.py -h` to get the supported arguments
+* Inference Engine API Docs [here](https://docs.openvinotoolkit.org/latest/_inference_engine_ie_bridges_python_docs_api_overview.html)
+* Model documentation [here](https://docs.openvinotoolkit.org/latest/_models_intel_index.html) 
 
 ## Benchmarks
-*TODO:* Include the benchmark results of running your model on multiple hardwares and multiple model precisions. Your benchmarks can include: model loading time, input/output processing time, model inference time etc.
+I am not able to run the model on multiple devices because I don't have access to all kind of hardware. Though I did try to execute this on udacity's workspace but was getting `file not found ` erro for input file.
+NOTE: I have attached the expected working python notebook to run this experiment on multiple devices.
 
 ## Results
-*TODO:* Discuss the benchmark results and explain why you are getting the results you are getting. For instance, explain why there is difference in inference time for FP32, FP16 and INT8 models.
+System Info: MacBook Pro with intel i5
+Inference time for full demo video:
+    FP16: 113.7 sec
+    FP32: 117.2 sec
+
 
 ## Stand Out Suggestions
 This is where you can provide information about the stand out suggestions that you have attempted.
