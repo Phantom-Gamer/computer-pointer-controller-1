@@ -22,7 +22,7 @@ class FaceLandmarksDetection:
     '''
     Class for the Face Detection Model.
     '''
-    def __init__(self, model_name, threshold, device='CPU', extensions=None):
+    def __init__(self, model_name, threshold, device='CPU', extensions=None, async_mode = True):
         '''
         TODO: Use this to set your instance variables.
         '''
@@ -38,6 +38,8 @@ class FaceLandmarksDetection:
         self.extensions = extensions
         self.initial_w = None
         self.initial_h = None
+        self.async_mode = async_mode
+
 
     def load_model(self):
         '''
@@ -80,7 +82,11 @@ class FaceLandmarksDetection:
         self.initial_w = image.shape[1]
         self.initial_h = image.shape[0]
         frame = self.preprocess_input(image)
-        self.exec_network.requests[0].async_infer(inputs={self.input_blob: frame})
+        if self.async_mode:
+            self.exec_network.requests[0].async_infer(inputs={self.input_blob: frame})
+        else:
+            self.exec_network.requests[0].infer(inputs={self.input_blob: frame})
+
         if self.exec_network.requests[0].wait(-1) == 0:
             outputs = self.exec_network.requests[0].outputs[self.output_blob]
             frame,coords = self.preprocess_output(image, outputs)
@@ -139,7 +145,7 @@ class FaceLandmarksDetection:
         yrmin = yr-25
         xrmax = xr+25
         yrmax = yr+25
-
+        
         cv2.rectangle(frame, (xlmin, ylmin), (xlmax, ylmax), (0, 55, 255), 1)
         cv2.rectangle(frame, (xrmin, yrmin), (xrmax, yrmax), (0, 55, 255), 1)
         coords = [[int(xlmin),int(ylmin),int(xlmax),int(ylmax)],[int(xrmin),

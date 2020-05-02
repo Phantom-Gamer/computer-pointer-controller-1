@@ -22,7 +22,7 @@ class GazeEstimation:
     '''
     Class for the Face Detection Model.
     '''
-    def __init__(self, model_name, threshold, device='CPU', extensions=None):
+    def __init__(self, model_name, threshold, device='CPU', extensions=None, async_mode = True):
         '''
         TODO: Use this to set your instance variables.
         '''
@@ -41,6 +41,7 @@ class GazeEstimation:
         self.extensions = extensions
         self.initial_w = None
         self.initial_h = None
+        self.async_mode = async_mode
 
     def load_model(self):
         '''
@@ -99,9 +100,15 @@ class GazeEstimation:
         left_eye_image,right_eye_image = self.preprocess_input(left_eye_image,right_eye_image)
 
         # self.exec_network.requests[0].async_infer(inputs={self.input_blob: {"left_eye_image":left_eye_image,"right_eye_image":right_eye_image}})
-        self.exec_network.requests[0].async_infer(inputs=
+        if self.async_mode:
+            self.exec_network.requests[0].async_infer(inputs=
                 {"head_pose_angles": pose_angles,"left_eye_image":left_eye_image,
                 "right_eye_image":right_eye_image})
+        else:
+            self.exec_network.requests[0].infer(inputs=
+                {"head_pose_angles": pose_angles,"left_eye_image":left_eye_image,
+                "right_eye_image":right_eye_image})
+
         if self.exec_network.requests[0].wait(-1) == 0:
             outputs = self.exec_network.requests[0].outputs[self.output_blob]
             out = self.preprocess_output(left_eye_image, right_eye_image, pose_angles, outputs)

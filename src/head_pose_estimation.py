@@ -22,7 +22,7 @@ class HeadPoseEstimation:
     '''
     Class for the Face Detection Model.
     '''
-    def __init__(self, model_name, threshold, device='CPU', extensions=None):
+    def __init__(self, model_name, threshold, device='CPU', extensions=None, async_mode = True):
         '''
         TODO: Use this to set your instance variables.
         '''
@@ -38,6 +38,10 @@ class HeadPoseEstimation:
         self.extensions = extensions
         self.initial_w = None
         self.initial_h = None
+        self.async_mode = async_mode
+
+
+
     def load_model(self):
         '''
         TODO: You will need to complete this method.
@@ -78,7 +82,11 @@ class HeadPoseEstimation:
         self.initial_w = image.shape[1]
         self.initial_h = image.shape[0]
         frame = self.preprocess_input(image)
-        self.exec_network.requests[0].async_infer(inputs={self.input_blob: frame})
+        if self.async_mode:
+            self.exec_network.requests[0].async_infer(inputs={self.input_blob: frame})
+        else:
+            self.exec_network.requests[0].infer(inputs={self.input_blob: frame})
+        
         if self.exec_network.requests[0].wait(-1) == 0:
             outputs = self.exec_network.requests[0].outputs
             is_looking, pose_angles = self.preprocess_output(image, outputs)
@@ -120,9 +128,8 @@ class HeadPoseEstimation:
         angle_p_fc = outputs["angle_p_fc"][0]
         angle_y_fc = outputs["angle_y_fc"][0]
         angle_r_fc = outputs["angle_r_fc"][0]
-        print('Detected Angles roll(x):yaw(y):pitch(z) {} : {} : {}'
-            .format(angle_r_fc, angle_y_fc, angle_p_fc))
-        # return True,[[angle_y_fc,angle_p_fc,angle_r_fc]]
+        # print('Detected Angles roll(x):yaw(y):pitch(z) {} : {} : {}'
+        #     .format(angle_r_fc, angle_y_fc, angle_p_fc))
         if ((angle_y_fc > -22.5) & (angle_y_fc < 22.5) & (angle_p_fc > -22.5) &
                 (angle_p_fc < 22.5)):
             return True,[[angle_y_fc,angle_p_fc,angle_r_fc]]

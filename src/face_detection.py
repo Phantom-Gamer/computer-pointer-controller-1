@@ -22,7 +22,7 @@ class FaceDetection:
     '''
     Class for the Face Detection Model.
     '''
-    def __init__(self, model_name, threshold, device='CPU', extensions=None):
+    def __init__(self, model_name, threshold, device='CPU', extensions=None, async_mode = True):
         '''
         TODO: Use this to set your instance variables.
         '''
@@ -38,6 +38,7 @@ class FaceDetection:
         self.extensions = extensions
         self.initial_w = None
         self.initial_h = None
+        self.async_mode = async_mode
 
     def load_model(self):
         '''
@@ -79,7 +80,11 @@ class FaceDetection:
         self.initial_w = image.shape[1]
         self.initial_h = image.shape[0]
         frame = self.preprocess_input(image)
-        self.exec_network.requests[0].async_infer(inputs={self.input_blob: frame})
+        if self.async_mode:
+            self.exec_network.requests[0].async_infer(inputs={self.input_blob: frame})
+        else:
+            self.exec_network.requests[0].infer(inputs={self.input_blob: frame})
+
         if self.exec_network.requests[0].wait(-1) == 0:
             outputs = self.exec_network.requests[0].outputs[self.output_blob]
             frame,coords = self.preprocess_output(image, outputs)
@@ -121,15 +126,17 @@ class FaceDetection:
         for obj in outputs[0][0]:
             # Draw bounding box for object when it's probability is more than
             #  the specified threshol
+            # Not too tight bound
             if obj[2] > float(self.threshold):
-                # if obj[3] < 0:
-                #     obj[3] = -obj[3]
-                # if obj[4] < 0:
-                #     obj[4] = -obj[4]
-                xmin = int(obj[3] * self.initial_w)
-                ymin = int(obj[4] * self.initial_h)
-                xmax = int(obj[5] * self.initial_w)
-                ymax = int(obj[6] * self.initial_h)
+                if obj[3] < 0:
+                    obj[3] = -obj[3]
+                if obj[4] < 0:
+                    obj[4] = -obj[4]
+                xmin = int(obj[3] * self.initial_w) - 10
+                ymin = int(obj[4] * self.initial_h) - 10
+                xmax = int(obj[5] * self.initial_w) + 10
+                ymax = int(obj[6] * self.initial_h) + 10
+                # print("Cords ", [xmin,ymin,xmax,ymax], obj[2])
                 cv2.rectangle(frame, (xmin, ymin), (xmax, ymax), (0, 55, 255), 1)
                 current_count = current_count + 1
                 coords.append([xmin,ymin,xmax,ymax])
