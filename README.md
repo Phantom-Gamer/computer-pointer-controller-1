@@ -10,7 +10,7 @@ To get these inputs, you will have to use three other OpenVino models:
 * [Head Pose Estimation](https://docs.openvinotoolkit.org/latest/_models_intel_head_pose_estimation_adas_0001_description_head_pose_estimation_adas_0001.html)
 * [Facial Landmarks Detection](https://docs.openvinotoolkit.org/latest/_models_intel_landmarks_regression_retail_0009_description_landmarks_regression_retail_0009.html)
 
-##The Pipeline
+## The Pipeline
 
 You will have to coordinate the flow of data from the input, and then amongst the different models and finally to the mouse controller. The flow of data will look like this:
 ![pipleline of the system](images/pipeline.png)
