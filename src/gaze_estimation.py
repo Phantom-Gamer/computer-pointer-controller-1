@@ -142,6 +142,7 @@ class GazeEstimation:
         '''
         gaze_vector = outputs[0]
         roll = gaze_vector[2]#pose_angles[0][2][0]
+        gaze_vector = gaze_vector / np.linalg.norm(gaze_vector)
         cs = math.cos(roll * math.pi / 180.0)
         sn = math.sin(roll * math.pi / 180.0)
 

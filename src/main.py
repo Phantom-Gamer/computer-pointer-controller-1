@@ -6,7 +6,7 @@ import cv2
 
 from threading import Thread
 from collections import namedtuple
-from argparse import ArgumentParser
+from argparse import ArgumentParser, SUPPRESS
 from pathlib import Path
 import logging as log
 from face_detection import FaceDetection
@@ -16,7 +16,6 @@ from gaze_estimation import GazeEstimation
 from mouse_controller import MouseController
 
 POSE_CHECKED = False
-DELAY = 5
 
 def args_parser():
     """
@@ -62,9 +61,8 @@ def main():
     Load the network and parse the output.
     :return: None
     """
-    global DELAY
     global POSE_CHECKED
-    controller = MouseController("low", "fast")
+    controller = MouseController("medium", "fast")
 
     log.basicConfig(format="[ %(levelname)s ] %(message)s",
                     level=log.INFO, stream=sys.stdout)
@@ -105,7 +103,6 @@ def main():
     if input_stream:
         cap.open(args.input)
         # Adjust DELAY to match the number of FPS of the video file
-        DELAY = 1000 / cap.get(cv2.CAP_PROP_FPS)
 
     if not cap.isOpened():
         logger.error("ERROR! Unable to open video source")
@@ -176,7 +173,7 @@ def main():
             if args.write_intermediate == 'yes':
                 p = "Pose Angles {}, is Looking? {}".format(pose_angles,is_looking)
                 cv2.putText(frame, p, (50, 15), cv2.FONT_HERSHEY_COMPLEX,
-                        0.5, (255, 255, 255), 1)
+                        0.5, (255,0, 0), 1)
                 out_pm.write(frame)
 
             if is_looking:
@@ -200,12 +197,12 @@ def main():
                 if args.write_intermediate == 'yes':
                     p = "Gaze Vector {}".format(gaze_vector)
                     cv2.putText(frame, p, (50, 15), cv2.FONT_HERSHEY_COMPLEX,
-                            0.5, (255, 255, 255), 1)
+                            0.5, (255, 0, 0), 1)
                     fl = draw_gaze(left_eye_image, gaze_vector)
                     fr = draw_gaze(right_eye_image, gaze_vector)
                     f[ylmin:ylmax, xlmin:xlmax] = fl
                     f[yrmin:yrmax, xrmin:xrmax] = fr
-                    cv2.arrowedLine(f, (xlmin, ylmin), (xrmin, yrmin), (0,0,255), 5)
+                    # cv2.arrowedLine(f, (xlmin, ylmin), (xrmin, yrmin), (0,0,255), 5)
                     out_gm.write(frame)
 
                 if frame_count%10 == 0:
@@ -215,9 +212,9 @@ def main():
         #
         if POSE_CHECKED:
             cv2.putText(frame, "Head pose Inference time: {:.3f} ms.".format(det_time_hp * 1000), (0, 35),
-                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1)
             cv2.putText(frame, inf_time_message, (0, 15), cv2.FONT_HERSHEY_COMPLEX,
-                        0.5, (255, 255, 255), 1)
+                        0.5, (255, 0, 0), 1)
         out.write(frame)
         if frame_count%10 == 0:
             print("Inference time = ", int(time.time()-infer_time_start))
@@ -245,23 +242,20 @@ def main():
         out_gm.release()
 
 
-def draw_gaze(screen_img, gaze_pts, gaze_colors=None, scale=10, return_img=False, cross_size=16, thickness=10):
+def draw_gaze(screen_img, gaze_pts, gaze_colors=None, scale=4, return_img=False, cross_size=16, thickness=10):
 
     """ Draws an "x"-shaped cross on a screen for given gaze points, ignoring missing ones
     """
     width = int(cross_size * scale)
-    # for i, pt in enumerate(gaze_pts):
-    #     if pt is None: continue
-    #     print(pt)
+   
     draw_cross(screen_img, gaze_pts[0] * scale, gaze_pts[1] * scale, 
-        (0, 255, 255), width, thickness)
+        (0, 0, 255), width, thickness)
     return  screen_img
 
-def draw_cross(bgr_img,x, y,color=(255, 255, 255), width=2, thickness=1):
+def draw_cross(bgr_img,x, y,color=(255, 255, 255), width=2, thickness=0.5):
 
     """ Draws an "x"-shaped cross at (x,y)
     """
-
     x, y, w = int(x), int(y), int(width / 2)  # ensure points are ints for cv2 methods
 
     cv2.line(bgr_img, (x - w , y - w), (x + w , y + w), color, thickness)

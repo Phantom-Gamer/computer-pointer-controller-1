@@ -128,23 +128,21 @@ class FaceLandmarksDetection:
         current_count = 0
         coords = []
         outputs= outputs[0]
-        # As per model doc, The net outputs a blob with the shape: [1, 10], 
-        #containing a row-vector of 10 floating point values for five landmarks coordinates in the
-        # form (x0, y0, x1, y1, ..., x5, y5). So 0,1 -- represent left eye point, 2,3 presents right eye
+        
         xl,yl = outputs[0][0]*self.initial_w,outputs[1][0]*self.initial_h
         xr,yr = outputs[2][0]*self.initial_w,outputs[3][0]*self.initial_h
 
         # make box for left eye 
-        xlmin = xl-25
-        ylmin = yl-25
-        xlmax = xl+25
-        ylmax = yl+25
+        xlmin = xl-20
+        ylmin = yl-20
+        xlmax = xl+20
+        ylmax = yl+20
         
         # make box for right eye 
-        xrmin = xr-25
-        yrmin = yr-25
-        xrmax = xr+25
-        yrmax = yr+25
+        xrmin = xr-20
+        yrmin = yr-20
+        xrmax = xr+20
+        yrmax = yr+20
         
         cv2.rectangle(frame, (xlmin, ylmin), (xlmax, ylmax), (0, 55, 255), 1)
         cv2.rectangle(frame, (xrmin, yrmin), (xrmax, yrmax), (0, 55, 255), 1)
