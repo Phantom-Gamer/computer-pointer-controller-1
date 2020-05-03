@@ -50,8 +50,7 @@ You will have to coordinate the flow of data from the input, and then amongst th
   PyTweening==1.0.3
   six==1.14.0
   ```
-  
-  ```  
+ 
 * Run command `python3 main.py -h` to get the supported arguments
 * Inference Engine API Docs [here](https://docs.openvinotoolkit.org/latest/_inference_engine_ie_bridges_python_docs_api_overview.html)
 * Model documentation [here](https://docs.openvinotoolkit.org/latest/_models_intel_index.html) 
