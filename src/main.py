@@ -131,12 +131,11 @@ def main():
     pose_det.load_model()
     land_det.load_model()
     gaze_est.load_model()
+
+    model_load_time = time.time() - infer_time_start
+
     print("All models are loaded successfully")
 
-    try:
-        pass
-    except Exception as e:
-        print("Could not run Inference: ", e)
     while cap.isOpened():
         ret, frame = cap.read()
         if not ret:
@@ -224,6 +223,10 @@ def main():
             with open(os.path.join(args.output_dir, 'stats.txt'), 'w') as f:
                 f.write(str(round(total_time, 1))+'\n')
                 f.write(str(frame_count)+'\n')
+
+    if args.output_dir:
+        with open(os.path.join(args.output_dir, 'stats.txt'), 'a') as f:
+            f.write(str(round(model_load_time))+'\n')
 
     # Clean all models
     face_det.clean()

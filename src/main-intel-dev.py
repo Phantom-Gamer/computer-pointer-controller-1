@@ -129,6 +129,9 @@ def main():
     pose_det.load_model()
     land_det.load_model()
     gaze_est.load_model()
+
+    model_load_time = time.time() - infer_time_start
+
     print("All models are loaded successfully")
 
     try:
@@ -221,6 +224,10 @@ def main():
                 f.write(str(round(total_time, 1))+'\n')
                 f.write(str(frame_count)+'\n')
 
+    if args.output_dir:
+        with open(os.path.join(args.output_dir, 'stats.txt'), 'a') as f:
+            f.write(str(round(model_load_time))+'\n')
+            
     # Clean all models
     face_det.clean()
     pose_det.clean()
