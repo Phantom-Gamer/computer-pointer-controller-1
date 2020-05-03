@@ -42,22 +42,29 @@ pip install -e requirements.txt
 
 ## Benchmarks
 I run this model on 4 different hardware using Intel-dev cloud. Below is the list of hardware used and their results.
+
 CPU: https://ark.intel.com/products/88186/Intel-Core-i5-6500TE-Processor-6M-Cache-up-to-3-30-GHz-
+
 IGPU: https://ark.intel.com/products/88186/Intel-Core-i5-6500TE-Processor-6M-Cache-up-to-3-30-GHz-
+
 VPU: https://software.intel.com/en-us/neural-compute-stick
+
 FPGA: https://www.ieiworld.com/mustang-f100/en/
 
-Results with Model Precision-FP32:
+
+**Results with Model Precision-FP32:**
+
 FPS Graph                  |  Model load time plot
 :-------------------------:|:-------------------------:
 ![](images/fp32_frames_ps.png)  |  ![](images/fp32_model_load__time.png)
 
 Inference time plot        |  Combine graph for all 
 :-------------------------:|:-------------------------:
-![](images/fp32_inference_time.png)  |  ![](images/fp32_comparison.png)
+![](images/fp32_inference_time.png)  |  ![](images/fp32_comparison.png)  
+</br>
 
+**Results with Model Precision-FP16:**
 
-Results with Model Precision-FP16:
 FPS Graph                  |  Model load time plot
 :-------------------------:|:-------------------------:
 ![](images/fp16_frames_ps.png)  |  ![](images/fp16_model_load__time.png)
