@@ -24,18 +24,34 @@ You will have to coordinate the flow of data from the input, and then amongst th
 
 
 ## Documentation
-Enable the virtual environment:
-
-```
-source /opt/intel/openvino/bin/setupvars.sh
-```
-
-Install the requirements:
-
-```
-pip install -e requirements.txt
-```
-
+1. Install `Conda` on your system: https://docs.conda.io/projects/conda/en/latest/user-guide/install/macos.html
+2. Create virtual environment with python=3.7  `onda create --name py3-udacity python=3.7`
+3. Download and install Intel openVino as per your system : https://software.intel.com/en-us/openvino-toolkit/choose-download
+4. Verify openVino installation following the steps from openVino documentation.
+5. Activate conda environment: `conda activate py3-udacity`
+6. Install required binaries using `pip install -r requirements.txt`
+7. install numpy `conda install numpy`
+8. Install `pyautogui` using command `conda install -c conda-forge pyautogui`
+9. Below is the output of `pip freeze` command. Check if I have missed something:
+  ```
+  certifi==2020.4.5.1
+  mkl-fft==1.0.15
+  mkl-random==1.1.0
+  mkl-service==2.3.0
+  numpy==1.18.1
+  olefile==0.46
+  Pillow==5.3.0
+  PyAutoGUI==0.9.48
+  PyMsgBox==1.0.7
+  pyobjc-core==6.2
+  pyobjc-framework-Cocoa==6.1
+  pyobjc-framework-Quartz==5.3
+  PyScreeze==0.1.26
+  PyTweening==1.0.3
+  six==1.14.0
+  ```
+  
+  ```  
 * Run command `python3 main.py -h` to get the supported arguments
 * Inference Engine API Docs [here](https://docs.openvinotoolkit.org/latest/_inference_engine_ie_bridges_python_docs_api_overview.html)
 * Model documentation [here](https://docs.openvinotoolkit.org/latest/_models_intel_index.html) 
@@ -77,7 +93,7 @@ Inference time plot        |  Combine graph for all
 NOTE: I have attached the expected working python notebook to run this experiment on multiple devices. Check it [here](src/computer-controller.ipynb)
 
 ## Results
-As clear from the above results, total inference time and model load time is almost equal for all the device.
+As clear from the above results, total inference time and model load time is almost equal for all the device. While running application with model precision = FP32, it took a slight more time as it would require more compution.
 
 To run this model on intel-dev-cloud platform, use this [notebook](src/computer-controller.ipynb) and follow the guidlines from [how-to-run](how-to-run.md)
 
