@@ -104,6 +104,18 @@ Inference time plot        |  Combine graph for all
 :-------------------------:|:-------------------------:
 ![](images/fp16_inference_time.png)  |  ![](images/fp16_comparison.png)
 
+</br>
+
+**Results with Model Precision-FP32-INT8:**
+
+FPS Graph                  |  Model load time plot
+:-------------------------:|:-------------------------:
+![](images/int8_frames_ps.png)  |  ![](images/int8_model_load__time.png)
+
+Inference time plot        |  Combine graph for all 
+:-------------------------:|:-------------------------:
+![](images/int8_inference_time.png)  |  ![](images/int8_comparison.png)  
+
 
 NOTE: I have attached the expected working python notebook to run this experiment on multiple devices. Check it [here](src/computer-controller.ipynb)
 
