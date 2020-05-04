@@ -55,6 +55,22 @@ You will have to coordinate the flow of data from the input, and then amongst th
 * Inference Engine API Docs [here](https://docs.openvinotoolkit.org/latest/_inference_engine_ie_bridges_python_docs_api_overview.html)
 * Model documentation [here](https://docs.openvinotoolkit.org/latest/_models_intel_index.html) 
 
+## Project Directory structure
+    - bin
+        * this folder contains a demo video (demo.mp4)
+    - images
+        * This folder has graph/plot of the results of this application. It also has other images like pipeline diagram which are used in readme file.
+    - models
+        * Ideally this directory should have all the downloaded model, but you can choose some other directory as well to store the models.
+    - src
+        * This is the main project directory which has all the required code to run this applicaiton.
+        * face-detection.py, facial_landmark_detection.py, head_pose_estimation.py and gaze_estimation.py -- All these python files have the inference code for each model that we are using. These files have the complete code to run a model including pre_processing of inputs and outputs.
+        * **main.py** This is the main file which runs the whole application adn uses the above described files to calculate the mouse pointer and move it.
+        * mouse_controller.py -- This is a utility kind of file whihc is used to move mouse cursor location.
+        * computer-controller.ipynb -- This python notebook has the steps and code to run the model on intel-dev cloud and using this you can deploy this application on various devices like CPU, VPU, FPGA etc.
+        * queue-job.sh -- This file is just a shell scripts that will be used to submit the job qsub while running the application on intel-edge devices.
+        * There are few other file which not of much use and are created for testing only.
+
 ## Benchmarks
 I run this model on 4 different hardware using Intel-dev cloud. Below is the list of hardware used and their results.
 
@@ -92,7 +108,7 @@ Inference time plot        |  Combine graph for all
 NOTE: I have attached the expected working python notebook to run this experiment on multiple devices. Check it [here](src/computer-controller.ipynb)
 
 ## Results
-As clear from the above results, total inference time and model load time is almost equal for all the device. While running application with model precision = FP32, it took a slight more time as it would require more compution.
+As clear from the above results, total inference time and model load time is almost equal for all the device. While running application with model precision = FP32, it took a slight more time as it would require more compution. And I don't see any larger decrease in the accuracy while running the applicaition with low precision models. This may be because of the simplicity of models used and the ability to run smoothely on lower precision without affecting much of accuracy.
 
 To run this model on intel-dev-cloud platform, use this [notebook](src/computer-controller.ipynb) and follow the guidlines from [how-to-run](how-to-run.md)
 
